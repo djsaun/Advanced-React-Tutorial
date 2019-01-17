@@ -1,13 +1,17 @@
+const { forwardTo } = require('prisma-binding');
+
 // Need to set up a resolver whenever you create a new query
 const Query = {
-  // Each request contains four variables
-  // parent - parent schema in graphql
-  // args - arguments that have been passed to the query
-  // ctx - the context - surface the database and provides the rest of the request (headers, cookies, etc.)
-  // info - provides information on the graphql query that's coming in
-  // dogs(parent, args, ctx, info) {
-  //   global.dogs = global.dogs || [];
-  //   return global.dogs;
+  // If the query is exactly the same on both the prisma and on the yoga query
+  // You can forward that query from Yoga to Prisma
+  // Prevents duplication of code
+  // Forwarding to the db allows us to use the same API on the client as on the server
+  items: forwardTo('db')
+
+
+  // async items(parent, args, ctx, info) {
+  //   const items = await ctx.db.query.items();
+  //   return items;
   // }
 };
 
